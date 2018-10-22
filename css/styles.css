@@ -1,0 +1,47 @@
+body {
+    font-family: sans-serif;
+    width: 800px;
+    margin: 0 auto;
+    padding: 10px;
+    background-color: black;
+}
+
+.error {
+    color: red;
+}
+
+
+input[type=text],
+input[type=password],
+input[type=email] {
+    width: 400px;
+    font-size: 20px;
+    padding: 2px;
+}
+
+textarea {
+    width: 400px;
+    height: 200px;
+    font-size: 17px;
+    font-family: monospace;
+}
+
+input[type=submit] {
+    font-size: 24px;
+}
+
+.hunter{
+    /* padding: 0;
+    display: inline-block; */
+    background-color: brown;
+}
+
+nav> ul > li {
+    list-style: none;
+    display: inline-block;
+    margin-right: 15px;
+}
+
+nav #right-side {
+    float: right;
+}

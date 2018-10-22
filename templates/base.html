@@ -1,22 +1,75 @@
 <!doctype html>
 <html>
     <head>
-        <title>{{title}}</title>
+        <title>Blogz</title>
+        <link href='css/styles.css' rel="stylesheet" type="text/css"/>
+        <style>
+            body {
+                font-family: sans-serif;
+                width: 800px;
+                margin: 0 auto;
+                padding: 10px;
+            }
+                
+            .error {
+                color: red;
+            }
+            
+            
+            input[type=text],
+            input[type=password],
+            input[type=email] {
+                width: 400px;
+                font-size: 20px;
+                padding: 2px;
+            }
+            
+            textarea {
+                width: 400px;
+                height: 200px;
+                font-size: 17px;
+                font-family: monospace;
+            }
+            
+            input[type=submit] {
+                font-size: 14px;
+                margin-left: 200px;
+                margin-top: 10px;
+            }
+            
+            nav> ul > li {
+                list-style: none;
+                margin-right: 15px;
+                float: left;
+            }
+            
+            #right-side {
+                float: right;
+            }
+            </style>
     </head>
 <body>
-    <style>
-        div {
-            text-align: left
-        }
-    </style>
 
-    <div>
-    <a href="/blog">Main Blog Page</a>
-    <a href="/newpost">Add a Blog Entry</a>
-    <br />
-    <br />
-    </div>
+    {% if 'username' in session %}
+        <p>Hello, {{ session['username']}}</p>
+    {% endif %}
 
+    <nav>
+        <ul>
+            <li><a href="/">Home</a></li>
+            <li><a href="/blog">all posts</a></li>
+            <li><a href="/newpost">new post</a></li>
+        </ul>
+    </nav>
+
+    <nav id="right-side">
+        <ul>
+            <li><a href="/login">login</a></li>
+            <li><a href="/logout">logout</a></li>
+        </ul>
+    </nav>
+
+    <br />
     {% with messages = get_flashed_messages(with_categories=True) %}
     <ul>
         {% for category,message in messages %}
@@ -25,6 +78,7 @@
     </ul>
     {% endwith %}
 
+    <br />
     {% block content %}
     {% endblock %}
 
