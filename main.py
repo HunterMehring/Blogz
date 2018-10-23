@@ -1,5 +1,6 @@
 from flask import Flask, redirect, request, render_template, flash, session
 from flask_sqlalchemy import SQLAlchemy
+import hashlib, random, string
 import cgi
 import os
 
@@ -24,12 +25,12 @@ class Blog(db.Model):
 class User(db.Model):
     user_id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(120), unique=True)
-    password = db.Column(db.String(120))
+    pw_hash = db.Column(db.String(120))
     blogs = db.relationship('Blog', backref="owner")
 
     def __init__(self, username, password):
         self.username = username
-        self.password = password
+        self.pw_hash = make_pw_hash(password)
 
 
 @app.route('/')
@@ -77,13 +78,29 @@ def require_login():
     if request.endpoint not in allowed_routes and 'username' not in session:
         return redirect('/login')
 
+def make_salt():
+    return ''.join([random.choice(string.ascii_letters) for x in range(5)])
+
+def make_pw_hash(password, salt=None):
+    if not salt:
+        salt = make_salt()
+    salt = make_salt()
+    hash = hashlib.sha256(str.encode(password + salt)).hexdigest()
+    return '{0},{1}'.format(hash, salt)
+
+def check_pw_hash(password, hash):
+    salt = hash.split(',')[1]#this takes only the salt from the hash
+    if make_pw_hash(password, salt) == hash:
+        return True
+    return False
+
 @app.route('/login', methods=['POST', 'GET'])
 def login():
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
         user = User.query.filter_by(username=username).first()
-        if user and user.password == password:
+        if user and check_pw_hash(password, user.pw_hash):
             session['username'] = username
             flash("Logged in")
             return redirect('/')

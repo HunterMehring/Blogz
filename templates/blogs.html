@@ -1,15 +1,21 @@
 {% extends "base.html" %}
 
 {% block content %}
-
+<style>
+    #footer {
+        font-size: 12px;
+    }
+</style>
 {% if blogs|length == 0 %}
     <p>No blogs yet</p>
     {% else %}
+    <h1>Blog Posts!</h1>
         <ul>
             {% for blog in blogs %}
             <li>
                 <h2><a href="./blog?id={{blog.id}}">{{ blog.title }}</a></h2>
                 <p>{{blog.body}}</p>
+                <p id="footer">written by {{blog.owner.username}}</p>
                 <hr />
             </li>
             {% endfor %}
